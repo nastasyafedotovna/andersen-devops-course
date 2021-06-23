@@ -51,3 +51,8 @@
 ## 22.06.2021
  - installing ssh utility in powershell
  - chmod 400 by powershell
+## 23.06.2021
+ - pyinstaller
+ - i think compile python app to binary isn't good idea
+ - slices in golang
+ - find roadmap for golang developer
