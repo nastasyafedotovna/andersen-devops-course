@@ -23,16 +23,6 @@ Made with ❤️ by %your_name
 ```
 * bonus points for being creative when serving `/`
 
-### Hints
-* [installing flask](https://flask.palletsprojects.com/en/1.1.x/installation/#installation)
-* [become a developer](https://flask.palletsprojects.com/en/1.1.x/quickstart/)
-* [or whatch some videos](https://www.youtube.com/watch?v=Tv6qXtc4Whs)
-* [dealing with payloads](https://www.digitalocean.com/community/tutorials/processing-incoming-request-data-in-flask)
-* [Flask documentation](https://flask.palletsprojects.com/en/1.1.x/api/#flask.Request.get_json)
-* [The database](https://emojipedia.org/nature/)
-* 🐘 🐮 🦒
-* what would you expect to see when visiting a random unknown website?
-
 ### The operating stage:
 * create an ansible playbook that deploys the service to the VM
 * make sure all the components you need are installed and all the directories for the app are present
@@ -92,8 +82,8 @@ enter my vault passsword, then edit this line:
 
 
 
-#### in hosts file
-configure the hosts file:
+#### edit my ```hosts``` file
+configure the inventory file:
 ```sh
 flasktask ansible_host=<here the target machine ip>
 ....
@@ -101,7 +91,7 @@ ansible_user=<here the target machine user>
 ```
 ### Deploy
 
- 1. the 'deploy' script will generate the ssh keys and send them to the target machine 
+  1. the 'deploy' script will generate the ssh keys and send them to the target machine 
   2. updating the target system and install python3, python3-pip, python-setuptools, ufw
   3. creating dir for flask application
   4. copy service file
