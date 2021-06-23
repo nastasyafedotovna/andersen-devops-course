@@ -37,7 +37,7 @@ func main() {
 			case "git":
 				msg.Text = "https://github.com/nastasyafedotovna/andersen-devops-course"
 			case "tasks":
-				msg.Text = "TIL-blog and About me\n1. Ansible task\n2. One-liner to script task\n3. Git api script task\n4. Telegram bot on golang\n5. Docker task"
+				msg.Text = "TIL-blog and About me\n1. Ansible task\n2. One-liner to script task\n3. Telegram bot on golang\n4. Git api script task\n5. Docker task"
 			case "aboutme":
 				msg.Text = "https://github.com/nastasyafedotovna/andersen-devops-course/blob/main/aboutMyself/aboutme.md"
 			case "tilblog":
