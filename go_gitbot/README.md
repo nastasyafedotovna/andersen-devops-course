@@ -1,6 +1,6 @@
 ### Telegram bot on golang
 
-You can find bot by [@nastasyagobot](t.me/nastasyagobot)
+You can find bot by [@nastasyagobot](https://t.me/nastasyagobot)
 
 ### Commands:
 * /git		- link to my github repository.
