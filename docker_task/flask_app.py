@@ -7,7 +7,7 @@ from string import Template
 HTML_TEMPLATE = Template("""
 <!DOCTYPE html>
 <head>
-   <title>Ansible task</title>
+   <title>Docker task</title>
    <style>
       body{
           text-align: center;
@@ -88,8 +88,8 @@ def main():
 
         return out
 
-    head = """Ansible task by Gizar Zigangirov"""
-    return HTML_TEMPLATE.substitute(headline=head, youtube_id='rRPQs_kM_nw')
+    head = """Docker task by Gizar Zigangirov"""
+    return HTML_TEMPLATE.substitute(headline=head, youtube_id='oe6b5tMMw1k')
 
 if __name__=="__main__":
     app.run(host = '0.0.0.0',port='8080')
