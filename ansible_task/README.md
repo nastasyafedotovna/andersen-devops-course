@@ -37,9 +37,17 @@ Made with ❤️ by %your_name
 
 
 
-### Presetting the target system
+### terms used
+\<the target system user> -- user of your VM
+\<the target system sudo password> -- sudo password of user on your VM
+\<the target system ip> -- the IP address of your VM
+\<path to ssh-keys> -- path to ssh keys (for example: ```~/.ssh/example_id_rsa```)
+\<the target group name> -- name of your group of instances in hosts file
+\<vault file name> -- name of your ansible-vault file with secrets
+\<path to your inventory file> -- path to your hosts file
+> if user on your VM not in sudo group and no ssh keys
 
-#### install sudo
+##### install sudo
 Go to the superuser with the command:  
 ```sh
 su
@@ -49,65 +57,75 @@ enter root password then install ```sudo```:
 apt install sudo
 ```
 
-#### add user to sudo group:
+##### add user to sudo group:
 Under the superuser, enter the command:
 ```sh
-/usr/sbin/usermod -aG sudo <here the target machine user>
+/usr/sbin/usermod -aG sudo <the target system user>
 ```
 example:
 ```sh
-/usr/sbin/usermod -aG sudo gizar
+/usr/sbin/usermod -aG sudo gizar_devops_course
 ```
 For the changes to take effect, you need to logout.
 
+``ssh-copy-id`` - install your identity.pub in a remote machine's authorized_keys
+```ssh-keygen``` generates, manages and converts authentication keys for [ssh](https://www.opennet.ru/cgi-bin/opennet/man.cgi?topic=ssh&category=1)
+###### info from [opennet](opennet.ru)
+genereating ssh-keys:
+1. ```ssh-keygen -q -t rsa -N '' -f <path to ssh-keys> <<<y 2>&1 >/dev/null```
 
-### vault
-```sh
-ansible-vault create secret.yml
+```<<< y``` for overwrite if it needed
+
+for example: 
+```ssh-keygen -q -t rsa -N '' -f ~/.ssh/gizar_course_id_rsa <<<y 2>&1 >/dev/null```
+
+install pub to VM:
+
+2. ```ssh-copy-id -i <path to ssh-keys> <the target system user>@<the target system ip>```
+
+for example:
+```ssh-copy-id -i ~/.ssh/gizar_course_id_rsa.pub gizar_devops_course@192.168.33.10```
+
+> presetting ansible things
+
+##### hosts:
 ```
-enter your vault passsword, then add this lines to file:
+[<the target group name>]
+<the target system ip>
+[<the target group name>:vars]
+ansible_user=<the target system user>
 ```
-ansible_sudo_pass: <sudo pass of target machine user>
-ansible_ssh_private_key_file: ~/.ssh/andersen_id_rsa
+example you can view in my hosts file in "ansible_task" directory (or use my hosts file after your editing)
+
+##### ansible.cfg:
 ```
-###### or if you use my secret.yml
-
-my vault password: vault
-
-```sh
-ansible-vault edit secret.yml
+[defaults]
+interpreter_python=/usr/bin/python3
+host_key_checking = False
 ```
-enter my vault passsword, then edit this line:
-```ansible_sudo_pass: andersen``` to ```ansible_sudo_pass: <sudo pass of target machine user>```
+##### ansible-vault:
+create vault file:
 
-
-
-#### edit my ```hosts``` file
-configure the inventory file:
-```sh
-flasktask ansible_host=<here the target machine ip>
-....
-ansible_user=<here the target machine user>
+1. ```ansible-vault create <vault file name>```
+for example:
+```ansible-vault create secret.yml```
+2. Enter vault password and write this lines:
 ```
-### Deploy
-
-  1. the 'deploy' script will generate the ssh keys and send them to the target machine 
-  2. updating the target system and install python3, python3-pip, python-setuptools, ufw
-  3. creating dir for flask application
-  4. copy service file
-  5. installing flask
-  6. installing emoji
-  7. copy flask_app.py
-  8. enable ufw
-  9. creating rules 
-  10. copy sshd config
-  11. restarting sshd service
-  12. enable our service
-  13. starting our service
-
-for deploy just:
-```sh
-./deploy
+ansible_sudo_pass: <the target system sudo password>
+ansible_ssh_private_key_file: <path to ssh-keys>
 ```
+##### playbook.yml
+open ```playbook.yml``` and edit this lines:
+
+```hosts : <the target group name>``` (3rd string in file)
+
+```app_path : /home/<the target system user>/``` (7th string in file)
+
+
+>deploy
+
+```ansible-playbook -i <path to your inventory file> playbook.yml --ask-vault-pass -e '@<vault file name>'```
+
+
 
 
