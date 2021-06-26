@@ -38,14 +38,14 @@ Made with ❤️ by %your_name
 
 
 ### terms used
-\<the target system user> -- user of your VM
-\<the target system sudo password> -- sudo password of user on your VM
-\<the target system ip> -- the IP address of your VM
-\<path to ssh-keys> -- path to ssh keys (for example: ```~/.ssh/example_id_rsa```)
-\<the target group name> -- name of your group of instances in hosts file
-\<vault file name> -- name of your ansible-vault file with secrets
-\<path to your inventory file> -- path to your hosts file
-> if user on your VM not in sudo group and no ssh keys
+\<the target system user> -- user of your VM  
+\<the target system sudo password> -- sudo password of user on your VM  
+\<the target system ip> -- the IP address of your VM  
+\<path to ssh-keys> -- path to ssh keys (for example: ```~/.ssh/example_id_rsa```)  
+\<the target group name> -- name of your group of instances in hosts file  
+\<vault file name> -- name of your ansible-vault file with secrets  
+\<path to your inventory file> -- path to your hosts file  
+> if user on your VM not in sudo group and no ssh keys  
 
 ##### install sudo
 Go to the superuser with the command:  
