@@ -33,11 +33,11 @@ func main() {
 			case "start":
 				msg.Text = "Hi, i`m slave of nastasyafedotovna/andersen-devops-course repo.\nI can show you available commands by /commands command"
 			case "commands":
-				msg.Text = "Available commands:\n/start\n/commands\n/git\n/aboutme\n/tilblog\n/tasks\n/task1\n/task2\n/task3\n/task4\n/task5\n"
+				msg.Text = "Available commands:\n/start\n/commands\n/git\n/aboutme\n/tilblog\n/tasks\n/task1\n/task2\n/task3\n/task4\n/task5\n/task6"
 			case "git":
 				msg.Text = "https://github.com/nastasyafedotovna/andersen-devops-course"
 			case "tasks":
-				msg.Text = "TIL-blog and About me\n1. Ansible task\n2. One-liner to script task\n3. Telegram bot on golang\n4. Git api script task\n5. Docker task"
+				msg.Text = "TIL-blog and About me\n1. Ansible task\n2. One-liner to script task\n3. Telegram bot on golang\n4. Git api script task\n5. Docker task\n6. Terraform task"
 			case "aboutme":
 				msg.Text = "https://github.com/nastasyafedotovna/andersen-devops-course/blob/main/aboutMyself/aboutme.md"
 			case "tilblog":
@@ -52,6 +52,8 @@ func main() {
 				msg.Text = "https://github.com/nastasyafedotovna/andersen-devops-course/tree/main/git_api"
 			case "task5":
 				msg.Text = "https://github.com/nastasyafedotovna/andersen-devops-course/tree/main/docker_task"
+			case "task6":
+				msg.Text = "https://github.com/nastasyafedotovna/andersen-devops-course/tree/main/terraform_task"
 			default:
 				msg.Text = "I don't know that command.\nYou can view available commands: /commands"
 			}
