@@ -4,4 +4,4 @@
 * Then will stop the container
 * If you want you can modify ```task.sh``` at your discretion
 
-##### Size: 67.8MB
+##### Size: ~~67.8MB~~ 36.5MB
