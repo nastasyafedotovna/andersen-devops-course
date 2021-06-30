@@ -1,5 +1,15 @@
+data "aws_ami" "latest_amazon" {
+  owners      = ["amazon"]
+  most_recent = true
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+}
+
+
 resource "aws_instance" "ec2_web_server_a" {
-  ami           = ""
+  ami           = data.aws_ami.latest_amazon.id
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.subprivate_a.id
 }
