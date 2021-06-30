@@ -58,3 +58,5 @@
  - find roadmap for golang developer
 ## 29.06.2021
  - ansible in docker container on windows
+## 30.06.2021
+ - using data source in terraform for avoid the hardcode
