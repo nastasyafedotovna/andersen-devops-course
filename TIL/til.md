@@ -56,3 +56,5 @@
  - i think compile python app to binary isn't good idea
  - slices in golang
  - find roadmap for golang developer
+## 29.06.2021
+ - ansible in docker container on windows
