@@ -10,6 +10,7 @@ You can find bot by [@nastasyagobot](https://t.me/nastasyagobot)
 * /task3	- link to "telegram bot on golang" task
 * /task4  - link to "git api script" task
 * /task5  - link to docker task
+* /task6  - link to terraform task
 * /aboutme	- link to "about myself" task
 * /tilblog	- link to TIL blog task
 * /start	- start the bot
