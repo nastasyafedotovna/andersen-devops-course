@@ -1,3 +1,14 @@
+
+provider "aws" {
+  region  = var.region
+  profile = "default"
+}
+
+
+#------search available zones in region
+data "aws_availability_zones" "available" {}
+
+#-----search latest amazon linux image in region
 data "aws_ami" "latest_amazon" {
   owners      = ["amazon"]
   most_recent = true
@@ -7,64 +18,67 @@ data "aws_ami" "latest_amazon" {
   }
 }
 
-
-resource "aws_instance" "ec2_web_server_a" {
-  ami           = data.aws_ami.latest_amazon.id
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.subprivate_a.id
-}
-
-resource "aws_instance" "ec2_web_server_b" {
-  ami           = ""
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.subprivate_b.id
-}
-
-resource "aws_vpc" "vpc_by_gizar" {
-  cidr_block = var.fund_cidr
+#-----creating vpc
+resource "aws_vpc" "andersen_task_vpc" {
+  cidr_block = var.cidr
   tags = {
-    Name = "terraform-task-VPC"
-  }
-}
-
-resource "aws_subnet" "subpublic_a" {
-  vpc_id            = aws_vpc.vpc_by_gizar.id
-  cidr_block        = var.cidr_subpub_a
-  availability_zone = "${var.region}a"
-
-  tags = {
-    Name = "terraform-task-subpublic-a"
+    Name = "andersen_task-VPC"
   }
 }
 
 
-resource "aws_subnet" "subprivate_a" {
-  vpc_id            = aws_vpc.vpc_by_gizar.id
-  cidr_block        = var.cidr_subprivate_a
-  availability_zone = "${var.region}a"
+
+#-----creating private subnets in vpc
+resource "aws_subnet" "sub_private_a"{
+  vpc_id = aws_vpc.andersen_task_vpc.id
+  cidr_block = var.cidr_private_a
+  availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
-    Name = "terraform-task-subprivate-a"
+    Name = "private subnet A"
   }
 }
 
-resource "aws_subnet" "subpublic_b" {
-  vpc_id            = aws_vpc.vpc_by_gizar.id
-  cidr_block        = var.cidr_subpub_b
-  availability_zone = "${var.region}b"
+resource "aws_subnet" "sub_private_b"{
+  vpc_id = aws_vpc.andersen_task_vpc.id
+  cidr_block = var.cidr_private_b
+  availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
-    Name = "terraform-task-subpublic-a"
+    Name = "private subnet B"
   }
 }
 
-
-resource "aws_subnet" "subprivate_b" {
-  vpc_id            = aws_vpc.vpc_by_gizar.id
-  cidr_block        = var.cidr_subprivate_b
-  availability_zone = "${var.region}b"
+#-----creating public subnets in vpc
+resource "aws_subnet" "sub_public_a"{
+  vpc_id = aws_vpc.andersen_task_vpc.id
+  cidr_block = var.cidr_public_a
+  availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
-    Name = "terraform-task-subprivate-b"
+    Name = "public subnet A"
   }
 }
+
+resource "aws_subnet" "sub_public_b"{
+  vpc_id = aws_vpc.andersen_task_vpc.id
+  cidr_block = var.cidr_public_b
+  availability_zone = data.aws_availability_zones.available.names[1]
+
+  tags = {
+    Name = "public subnet B"
+  }
+}
+
+#data "aws_subnet_ids" "subnets" {
+#  vpc_id = aws_vpc.andersen_task_vpc.id
+#}
+
+#data "aws_subnet" "example" {
+#  for_each = data.aws_subnet_ids.subnets.ids
+#  id       = each.value
+#}
+
+#output "aws_subnets" {
+#  value = [for s in data.aws_subnet.example : s.cidr_block]
+#}
