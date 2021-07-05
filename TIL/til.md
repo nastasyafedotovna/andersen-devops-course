@@ -60,3 +60,5 @@
  - ansible in docker container on windows
 ## 30.06.2021
  - using data source in terraform for avoid the hardcode
+## 05.07.2021
+ - installing jenkins and learning jenkins UI
