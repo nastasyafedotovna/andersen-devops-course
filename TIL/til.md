@@ -56,9 +56,15 @@
  - i think compile python app to binary isn't good idea
  - slices in golang
  - find roadmap for golang developer
+## 28.06.2021
+ - aws key pair in terraform
 ## 29.06.2021
  - ansible in docker container on windows
 ## 30.06.2021
  - using data source in terraform for avoid the hardcode
+## 03.07.2021
+ - creating subnets
 ## 05.07.2021
  - installing jenkins and learning jenkins UI
+## 06.07.2021
+ - using isolated environments for terraform project
