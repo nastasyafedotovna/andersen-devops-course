@@ -15,6 +15,29 @@ data "aws_ami" "latest_amazon" {
   }
 }
 
+#------------ S3 -------------------------
+resource "aws_s3_bucket" "b" {
+  bucket_prefix = var.prefix
+  acl    = "private"
+  versioning {
+    enabled = true
+  }
+  tags = {
+    Name        = "andersen terraform task bucket"
+    Environment = "dev"
+  }
+}
+
+
+resource "aws_s3_bucket_object" "object" {
+  bucket = aws_s3_bucket.b.id
+  key    = "index.html"
+  source = "index.html"
+
+  etag = filemd5("index.html")
+}
+
+#-------------------------------------------------------
 
 
 #--------- TLS KEY --------------------------------------
@@ -23,7 +46,7 @@ resource "tls_private_key" "pk" {
   rsa_bits  = 4096
   
   provisioner "local-exec" { # Create "myKey.pem" to your computer!!
-    command = "echo '${tls_private_key.pk.private_key_pem}' > ./myKey.pem"
+    command = "echo '${tls_private_key.pk.private_key_pem}' > ~/.ssh/myKey.pem"
   }
 }
 
@@ -178,10 +201,10 @@ resource "aws_launch_configuration" "web" {
   image_id        = data.aws_ami.latest_amazon.id
   instance_type   = "t2.micro"
   security_groups = [aws_security_group.web.id]
-  depends_on = [tls_private_key.pk]
+  #depends_on = [tls_private_key.pk]
 
   key_name  = aws_key_pair.generated_key.key_name
-  user_data = file("user_data.sh.tpl")
+  user_data = file("user_data.sh")
   
 
   lifecycle {
