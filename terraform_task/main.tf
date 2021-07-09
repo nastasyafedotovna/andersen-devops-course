@@ -17,7 +17,7 @@ data "aws_ami" "latest_amazon" {
 
 #------------ S3 -------------------------
 resource "aws_s3_bucket" "b" {
-  bucket_prefix = var.prefix
+  bucket = "gizarzigangirovandersenhw"
   acl    = "private"
   versioning {
     enabled = true
@@ -196,10 +196,18 @@ resource "aws_elb" "web" {
   }
 } */
 
+
+resource "aws_iam_instance_profile" "instprof" {
+  name = "${var.prefix}-instprof"
+  role = aws_iam_role.role_ec2_s3.name
+}
+
+
 resource "aws_launch_configuration" "web" {
   name_prefix     = "${var.prefix}LC_"
   image_id        = data.aws_ami.latest_amazon.id
   instance_type   = "t2.micro"
+  iam_instance_profile = aws_iam_instance_profile.instprof.id
   security_groups = [aws_security_group.web.id]
   #depends_on = [tls_private_key.pk]
 
@@ -221,10 +229,63 @@ resource "aws_autoscaling_group" "web" {
   min_elb_capacity     = 2
   health_check_type    = "ELB"
   vpc_zone_identifier  = [aws_subnet.pr_a.id, aws_subnet.pr_b.id]
-  load_balancers       = [aws_elb.web.name]
+  #load_balancers       = [aws_elb.web.name]
 
 
   lifecycle {
     create_before_destroy = true
   }
+}
+
+
+# Create a new load balancer attachment
+resource "aws_autoscaling_attachment" "asg_attachment_bar" {
+  autoscaling_group_name = aws_autoscaling_group.web.id
+  elb                    = aws_elb.web.id
+}
+
+resource "aws_iam_role" "role_ec2_s3" {
+  name = "${var.prefix}-role-ec2-s3"
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      },
+    ]
+  })
+
+  tags = {
+    tag-key = "${var.prefix}-role_ec2_s3"
+  }
+
+}
+
+resource "aws_iam_role_policy" "pol" {
+  name = "policy-ec2-s3"
+  role = aws_iam_role.role_ec2_s3.id
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action = [
+          "s3:Get*",
+          "s3:List*"
+        ],
+        Resource = "*"
+      },
+    ]
+  })
 }
