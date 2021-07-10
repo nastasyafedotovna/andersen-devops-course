@@ -263,7 +263,7 @@ resource "aws_autoscaling_group" "web" {
 } */
 
 resource "aws_iam_role" "role_ec2_s3" {
-  name = "${var.prefix}-role-ec2-s3"
+  name_prefix = "${var.prefix}"
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
@@ -306,4 +306,8 @@ resource "aws_iam_role_policy" "pol" {
       },
     ]
   })
+}
+
+output "web_loadbalancer_url" {
+  value = aws_lb.web.dns_name
 }
