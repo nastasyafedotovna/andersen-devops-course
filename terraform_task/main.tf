@@ -155,19 +155,36 @@ resource "aws_security_group" "web" {
 }
 
 
-resource "aws_elb" "web" {
-  name = "terraformtaskelb"
-
-  subnets         = ["${aws_subnet.pr_a.id}","${aws_subnet.pr_b.id}"]
-  security_groups = ["${aws_security_group.elb.id}"]
+resource "aws_lb" "web" {
+  name = "terraformtaskalb"
+  load_balancer_type = "application"
+  subnets         = [aws_subnet.pr_a.id, aws_subnet.pr_b.id]
+  security_groups = [aws_security_group.elb.id]
 #  instances       = ["${aws_instance.web.id}"]
-
-  listener {
+  enable_deletion_protection = false
+/*   listener {
     instance_port     = 80
     instance_protocol = "http"
     lb_port           = 80
     lb_protocol       = "http"
+  } */
+}
+
+resource "aws_lb_listener" "web" {
+  load_balancer_arn = aws_lb.web.arn
+  port = "80"
+  protocol = "HTTP"
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.web.arn
   }
+}
+
+resource "aws_lb_target_group" "web" {
+  name_prefix = "task-"
+  port = 80
+  protocol = "HTTP"
+  vpc_id = aws_vpc.vpc.id
 }
 
 /* resource "aws_instance" "web" {
@@ -229,6 +246,7 @@ resource "aws_autoscaling_group" "web" {
   min_elb_capacity     = 2
   health_check_type    = "ELB"
   vpc_zone_identifier  = [aws_subnet.pr_a.id, aws_subnet.pr_b.id]
+  target_group_arns    = [aws_lb_target_group.web.arn]
   #load_balancers       = [aws_elb.web.name]
 
 
@@ -239,10 +257,10 @@ resource "aws_autoscaling_group" "web" {
 
 
 # Create a new load balancer attachment
-resource "aws_autoscaling_attachment" "asg_attachment_bar" {
+/* resource "aws_autoscaling_attachment" "asg_attachment_bar" {
   autoscaling_group_name = aws_autoscaling_group.web.id
   elb                    = aws_elb.web.id
-}
+} */
 
 resource "aws_iam_role" "role_ec2_s3" {
   name = "${var.prefix}-role-ec2-s3"
