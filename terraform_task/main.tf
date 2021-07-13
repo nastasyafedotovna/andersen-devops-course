@@ -160,14 +160,7 @@ resource "aws_lb" "web" {
   load_balancer_type = "application"
   subnets         = [aws_subnet.pr_a.id, aws_subnet.pr_b.id]
   security_groups = [aws_security_group.elb.id]
-#  instances       = ["${aws_instance.web.id}"]
   enable_deletion_protection = false
-/*   listener {
-    instance_port     = 80
-    instance_protocol = "http"
-    lb_port           = 80
-    lb_protocol       = "http"
-  } */
 }
 
 resource "aws_lb_listener" "web" {
@@ -187,32 +180,6 @@ resource "aws_lb_target_group" "web" {
   vpc_id = aws_vpc.vpc.id
 }
 
-/* resource "aws_instance" "web" {
-  ami        = data.aws_ami.latest_amazon.id
-  depends_on = [tls_private_key.pk]
-
-  connection {
-
-    # The default username for our AMI
-    user = "ec2-user"
-    host = aws_instance.web.public_ip
-    private_key = "${file("./myKey.pem")}"
-    # The connection will use the local SSH agent for authentication.
-  }
-  instance_type          = "t2.micro"
-  key_name               = aws_key_pair.generated_key.key_name
-  vpc_security_group_ids = [aws_security_group.default.id]
-  subnet_id = "${aws_subnet.default.id}"
-  provisioner "remote-exec" {
-    inline = [
-      "sudo yum -y update",
-      "sudo amazon-linux-extras install nginx1 -y",
-      "sudo systemctl start nginx",
-      "sudo systemctl enable nginx"
-    ]
-  }
-} */
-
 
 resource "aws_iam_instance_profile" "instprof" {
   name = "${var.prefix}-instprof"
@@ -226,7 +193,6 @@ resource "aws_launch_configuration" "web" {
   instance_type   = "t2.micro"
   iam_instance_profile = aws_iam_instance_profile.instprof.id
   security_groups = [aws_security_group.web.id]
-  #depends_on = [tls_private_key.pk]
 
   key_name  = aws_key_pair.generated_key.key_name
   user_data = file("user_data.sh")
@@ -247,7 +213,6 @@ resource "aws_autoscaling_group" "web" {
   health_check_type    = "ELB"
   vpc_zone_identifier  = [aws_subnet.pr_a.id, aws_subnet.pr_b.id]
   target_group_arns    = [aws_lb_target_group.web.arn]
-  #load_balancers       = [aws_elb.web.name]
 
 
   lifecycle {
@@ -255,12 +220,6 @@ resource "aws_autoscaling_group" "web" {
   }
 }
 
-
-# Create a new load balancer attachment
-/* resource "aws_autoscaling_attachment" "asg_attachment_bar" {
-  autoscaling_group_name = aws_autoscaling_group.web.id
-  elb                    = aws_elb.web.id
-} */
 
 resource "aws_iam_role" "role_ec2_s3" {
   name_prefix = "${var.prefix}"
@@ -282,7 +241,7 @@ resource "aws_iam_role" "role_ec2_s3" {
   })
 
   tags = {
-    tag-key = "${var.prefix}-role_ec2_s3"
+    tag-key = "${var.prefix}role_ec2_s3"
   }
 
 }
