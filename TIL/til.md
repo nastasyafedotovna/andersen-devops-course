@@ -68,3 +68,7 @@
  - installing jenkins and learning jenkins UI
 ## 06.07.2021
  - using isolated environments for terraform project
+## 13.07.2021
+ - github actions first try
+## 14.07.2021
+ - postgresql in docker
