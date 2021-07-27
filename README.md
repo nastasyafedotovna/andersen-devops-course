@@ -24,3 +24,13 @@ Course duration: 31.05 - 21.07
 | beta version | more than 50% complete work |
 | on tests | version is being tested |
 | done | work is done |
+
+
+## Exam links
+| Language  | Link | status |
+| ------------- | ------------- |---------|
+| Python | [hello world 1](https://github.com/nastasyafedotovna/andersen-exam-python)  | [![pylint-pytest-bandit](https://github.com/nastasyafedotovna/andersen-exam-python/actions/workflows/pylint-pytest-bandit.yml/badge.svg)](https://github.com/nastasyafedotovna/andersen-exam-python/actions/workflows/pylint-pytest-bandit.yml) [![publish-image-to-ecr-and-deploy-to-ecs](https://github.com/nastasyafedotovna/andersen-exam-python/actions/workflows/aws.yml/badge.svg)](https://github.com/nastasyafedotovna/andersen-exam-python/actions/workflows/aws.yml)
+
+# andersen-exam-python |
+| Go | [hello world 2](https://github.com/nastasyafedotovna/andersen-exam-golang)  | [![build-test](https://github.com/nastasyafedotovna/andersen-exam-golang/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/nastasyafedotovna/andersen-exam-golang/actions/workflows/go.yml) [![golangci-lint](https://github.com/nastasyafedotovna/andersen-exam-golang/actions/workflows/golint.yml/badge.svg?branch=main)](https://github.com/nastasyafedotovna/andersen-exam-golang/actions/workflows/golint.yml) [![publish-image-to-ecr-and-deploy-to-ecs](https://github.com/nastasyafedotovna/andersen-exam-golang/actions/workflows/aws.yml/badge.svg?branch=main)](https://github.com/nastasyafedotovna/andersen-exam-golang/actions/workflows/aws.yml)
+ |
