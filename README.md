@@ -15,6 +15,8 @@ Course duration: 31.05 - 21.07
 | [git api task](https://github.com/nastasyafedotovna/andersen-devops-course/tree/main/git_api)  | 21.06 21:00|done|
 | [docker task](https://github.com/nastasyafedotovna/andersen-devops-course/tree/main/docker_task)  | 28.06 21:00|done|
 | [terraform task](https://github.com/nastasyafedotovna/andersen-devops-course/tree/main/terraform_task)  | optional task|done (no additional tasks)|
+| [exam](https://github.com/nastasyafedotovna/andersen-devops-course/tree/main/terraform_task)  | 29.07 |done|
+
 ## Status values
 
 | Value | Description |
