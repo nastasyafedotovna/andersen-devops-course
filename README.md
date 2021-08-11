@@ -2,7 +2,7 @@
 *This repository is dedicated to Andersen's DevOps course.*
 
 ## Task table
-Course duration: 31.05 - 21.07
+Course duration: 31.05 - 30.07
 
 
 | Task  | Deadline |Status|
