@@ -17,7 +17,7 @@ RUN pip3 install -r requirements.txt && \
     /usr/local/lib/python*/*/werkzeug/debug* /usr/local/lib/python*/*/werkzeug/middleware* \
     /usr/local/lib/python*/site-packages/*/__pycache__/*
 
-
+#sdadadsd
 FROM alpine
 MAINTAINER Gizar Zigangirov 'gizar.zigangirov@gmail.com'
 COPY --from=build-stage . .
