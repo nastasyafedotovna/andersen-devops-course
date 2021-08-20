@@ -6,9 +6,11 @@ pipeline {
     stages {
         stage('Start') {
             steps {
+                script {
+                    def messageForQA = '${env.GIT_COMMITTER_NAME} started *${env.JOB_NAME} [${env.BUILD_NUMBER}]*\nApplication timeout is expected'
+                    sendMessage(Gizar_chat_ID, messageForQA)
+                }
 
-                def messageForQA = '${env.GIT_COMMITTER_NAME} started *${env.JOB_NAME} [${env.BUILD_NUMBER}]*\nApplication timeout is expected'
-                sendMessage(Gizar_chat_ID, messageForQA)
             }
         }
         stage('Test') {
