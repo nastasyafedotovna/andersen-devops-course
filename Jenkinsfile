@@ -56,7 +56,7 @@ pipeline {
 			}
 	    }
             failure {
-        withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'Evan_chat_ID', variable: 'chatID')]) {
+        withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'Gizar_chat_ID', variable: 'chatID')]) {
         sh  ("""
             curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='Job: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n\n*Branch*: ${env.GIT_BRANCH} \n*Build* : Failed \n*Published* = NO \n\nЧел там [последний коммит](https://github.com/nastasyafedotovna/andersen-devops-course/commit/${env.GIT_COMMIT}) паламалася\n\nCheck console output at ${env.BUILD_URL}console'
         """)
