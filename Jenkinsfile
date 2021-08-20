@@ -8,7 +8,7 @@ pipeline {
             steps {
                 script {
                     def messageForQA = '${env.GIT_COMMITTER_NAME} started *${env.JOB_NAME} [${env.BUILD_NUMBER}]*\nApplication timeout is expected'
-                    sendMessage(Gizar_chat_ID, messageForQA)
+                    sendMessage('Gizar_chat_ID', messageForQA)
                 }
 
             }
@@ -37,8 +37,8 @@ pipeline {
                 def messageForQA = '*${env.JOB_NAME} [${env.BUILD_NUMBER}]* FINISHED\n\n*Status* : OK \n*Чел там [последний коммит](https://github.com/nastasyafedotovna/andersen-devops-course/commit/${env.GIT_COMMIT}) успешно задеплоился\n\nCheck console output at ${env.BUILD_URL}console'
                 def messageForComitter = '*${env.JOB_NAME} [${env.BUILD_NUMBER}]* FINISHED\n\n*Status* : OK \n*Чел там [последний коммит](https://github.com/nastasyafedotovna/andersen-devops-course/commit/${env.GIT_COMMIT}) успешно задеплоился\n\nCheck console output at ${env.BUILD_URL}console'
 
-                sendMessage(Gizar_chat_ID, messageForQA)
-                sendMessage(Evan_chat_ID, messageForComitter)
+                sendMessage('Gizar_chat_ID', messageForQA)
+                sendMessage('Evan_chat_ID', messageForComitter)
             }
 		}
             aborted {
