@@ -36,9 +36,9 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-         withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'Evan_chatID', variable: 'Evan_chatID')]) {
+         withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'Evan_chat_ID', variable: 'Evan_chat_ID')]) {
         sh  ("""
-            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='ЗАЛУПА ТЫ АПХПАХПАХХПАХПАХПА'
+            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${Evan_chat_ID} -d parse_mode=markdown -d text='ЗАЛУПА ТЫ АПХПАХПАХХПАХПАХПА'
 	""")
         }
             }
