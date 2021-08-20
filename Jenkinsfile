@@ -1,66 +1,54 @@
 #!groovy
 pipeline {
     agent any
+    def sendMessage(chat_id, message){
+        withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chat_id', variable: 'chatID')]) {
+        sh  ("""
+             curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text=message
+        """)
+        }
+    }
 
     stages {
         stage('Start') {
             steps {
-         withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chatID', variable: 'chatID')]) {
-        sh  ("""
-            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='${BUILD_TRIGGER_BY}\nJob: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n\n*Branch*: ${env.GIT_BRANCH} \n'
-        """)
-        }
+                messageForQA = '${env.GIT_COMMITTER_NAME} started *${env.JOB_NAME} [${env.BUILD_NUMBER}]*\nApplication timeout is expected'
+                sendMessage(Gizar_chat_ID, messageForQA)
             }
         }
         stage('Test') {
             steps {
-         withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chatID', variable: 'chatID')]) {
-        sh  ("""
-            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='Job: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n*Branch*: ${env.GIT_BRANCH} \n*Test stage*:OK'
-        """)
-        }
+                echo "Test step ...."
             }
         }
+
         stage('Build') {
             steps {
-         withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chatID', variable: 'chatID')]) {
-        sh  ("""
-            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='Job: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n*Branch*: ${env.GIT_BRANCH} \n*Build stage*:OK'
-        """)
-        }
+                echo "Build step ...."
             }
         }
+
         stage('Deploy') {
             steps {
-         withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chatID', variable: 'chatID')]) {
-        sh  ("""
-            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='Job: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n\n*Branch*: ${env.GIT_BRANCH} \n*Deploy stage*:OK'
-        """)
-        }
+                echo "Deploy step ...."
             }
         }
     }
     post {
-            success {            
-        withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chatID', variable: 'chatID')]) {
-        sh  ("""
-            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='Job: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n\n*Branch*: ${env.GIT_BRANCH} \n*Build* : OK \n*Published* = YES \n\nCheck console output at ${env.BUILD_URL}console'
-        """)
-        }
-			}
+        success {
+            messageForQA = '*${env.JOB_NAME} [${env.BUILD_NUMBER}]* FINISHED\n\n*Status* : OK \n*Чел там [последний коммит](https://github.com/nastasyafedotovna/andersen-devops-course/commit/${env.GIT_COMMIT}) успешно задеплоился\n\nCheck console output at ${env.BUILD_URL}console'
+            messageForComitter = '*${env.JOB_NAME} [${env.BUILD_NUMBER}]* FINISHED\n\n*Status* : OK \n*Чел там [последний коммит](https://github.com/nastasyafedotovna/andersen-devops-course/commit/${env.GIT_COMMIT}) успешно задеплоился\n\nCheck console output at ${env.BUILD_URL}console'
+
+            sendMessage(Gizar_chat_ID, messageForQA)
+            sendMessage(Evan_chat_ID, messageForComitter)
+
+		}
             aborted {
-        withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chatID', variable: 'chatID')]) {
-        sh  ("""
-            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='${BUILD_TRIGGER_BY}\nJob: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n\n*Branch*: ${env.GIT_BRANCH} \n*Build* : Aborted \n*Published* = NO \n\nCheck console output at ${env.BUILD_URL}console'
-        """)
-			}
+                echo ""
 	    }
             failure {
-        withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'Gizar_chat_ID', variable: 'chatID')]) {
-        sh  ("""
-            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='Job: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n\n*Branch*: ${env.GIT_BRANCH} \n*Build* : Failed \n*Published* = NO \n\nЧел там [последний коммит](https://github.com/nastasyafedotovna/andersen-devops-course/commit/${env.GIT_COMMIT}) паламалася\n\nCheck console output at ${env.BUILD_URL}console'
-        """)
+                echo ""
             }
        }
-}
+    }
 }
