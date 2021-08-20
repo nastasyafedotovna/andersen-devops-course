@@ -50,8 +50,8 @@ pipeline {
     }
 }
 
-def sendMessage(chat_id, message){
-    withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chat_id', variable: 'chatID')]) {
+def sendMessage(your_chat_id, message){
+    withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: your_chat_id, variable: 'chatID')]) {
         sh  ("""
              curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text=message
         """)
