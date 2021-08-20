@@ -49,6 +49,6 @@ pipeline {
             failure {
                 echo ""
             }
-       }
     }
 }
+
