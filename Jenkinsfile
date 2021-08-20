@@ -7,19 +7,40 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Start') {
             steps {
-                echo 'Building..'
+         withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chatID', variable: 'chatID')]) {
+        sh  ("""
+            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='${BUILD_TRIGGER_BY}\nJob: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n\n*Branch*: ${env.GIT_BRANCH} \n'
+        """)
+        }
             }
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+         withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chatID', variable: 'chatID')]) {
+        sh  ("""
+            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='Job: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n*Branch*: ${env.GIT_BRANCH} \n*Test stage*:OK'
+        """)
+        }
+            }
+        }
+        stage('Build') {
+            steps {
+         withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chatID', variable: 'chatID')]) {
+        sh  ("""
+            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='Job: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n*Branch*: ${env.GIT_BRANCH} \n*Build stage*:OK'
+        """)
+        }
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+         withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chatID', variable: 'chatID')]) {
+        sh  ("""
+            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='Job: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n\n*Branch*: ${env.GIT_BRANCH} \n*Deploy stage*:OK'
+        """)
+        }
             }
         }
     }
@@ -27,21 +48,21 @@ pipeline {
             success {            
         withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chatID', variable: 'chatID')]) {
         sh  ("""
-            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='${BUILD_TRIGGER_BY}\n*${env.JOB_NAME}* : POC \n*Branch*: ${env.GIT_BRANCH} \n*Build* : OK \n*Published* = YES'
+            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='Job: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n\n*Branch*: ${env.GIT_BRANCH} \n*Build* : OK \n*Published* = YES \n\nCheck console output at "${env.BUILD_URL}"'
         """)
         }
 			}
             aborted {             
         withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chatID', variable: 'chatID')]) {
         sh  ("""
-            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='*${env.JOB_NAME}* : POC *Branch*: ${env.GIT_BRANCH} *Build* : Aborted *Published* = NO'
+            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='${BUILD_TRIGGER_BY}\nJob: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n\n*Branch*: ${env.GIT_BRANCH} \n*Build* : Aborted \n*Published* = NO \n\nCheck console output at "${env.BUILD_URL}"'
         """)
 			}
 	    }
             failure {
         withCredentials([string(credentialsId: 'botTOKEN', variable: 'botTOKEN'), string(credentialsId: 'chatID', variable: 'chatID')]) {
         sh  ("""
-            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='${BUILD_TRIGGER_BY}\n*${env.JOB_NAME}* : POC *Branch*: ${env.GIT_BRANCH} *Build* : Failed *Published* = YES'
+            curl -s -X POST https://api.telegram.org/bot${botTOKEN}/sendMessage -d chat_id=${chatID} -d parse_mode=markdown -d text='${BUILD_TRIGGER_BY}\nJob: *${env.JOB_NAME} [${env.BUILD_NUMBER}]* \n\n*Branch*: ${env.GIT_BRANCH} \n*Build* : Failed \n*Published* = NO \n\nCheck console output at "${env.BUILD_URL}"'
         """)
             }
        }
